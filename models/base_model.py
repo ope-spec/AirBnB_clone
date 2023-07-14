@@ -6,6 +6,7 @@ Defines the BaseModel class.
 
 import uuid
 from datetime import datetime
+from models import storage
 
 
 class BaseModel:
@@ -27,8 +28,8 @@ class BaseModel:
         Attributes:
             id (str): Unique identifier assigned to the instance.
             created_at (datetime): Date and time when the instance is created.
-            updated_at (datetime): Date and time when the instance
-                                   is last updated.
+            updated_at (datetime): Date and time when the instance is
+            last updated.
         """
         if kwargs:
             for key, value in kwargs.items():
@@ -63,17 +64,18 @@ class BaseModel:
         updated_at with the current datetime.
         """
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """
         Returns a dictionary representation of the BaseModel instance.
 
         Returns:
-            dict: Dictionary containing all keys/values of
-                  __dict__ of the instance.
+            dict: Dictionary containing all keys/values
+                  of __dict__ of the instance.
                   Includes the __class__ key with the class name.
-                  The created_at and updated_at attributes are converted
-                  to string objects in ISO format.
+                  The created_at and updated_at attributes are
+                  converted to string objects in ISO format.
         """
         obj_dict = self.__dict__.copy()
         obj_dict['__class__'] = self.__class__.__name__
