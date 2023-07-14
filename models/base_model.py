@@ -31,18 +31,22 @@ class BaseModel:
             updated_at (datetime): Date and time when the instance is
             last updated.
         """
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = self.created_at
+
         if kwargs:
             for key, value in kwargs.items():
                 if key != '__class__':
-                    if key == 'created_at' or key == 'updated_at':
-                        value = datetime.strptime(
-                            value, '%Y-%m-%dT%H:%M:%S.%f'
-                        )
                     setattr(self, key, value)
+            if 'created_at' in kwargs:
+                self.created_at = datetime.strptime(
+                    kwargs['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
+            if 'updated_at' in kwargs:
+                self.updated_at = datetime.strptime(
+                    kwargs['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
         else:
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = self.created_at
+            storage.new(self)
 
     def __str__(self):
         """
