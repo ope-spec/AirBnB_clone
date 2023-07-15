@@ -6,9 +6,12 @@ Defines the BaseModel class.
 
 import uuid
 from datetime import datetime
-from models import storage
+import models
 
 
+
+
+from datetime import datetime
 class BaseModel:
     """
     BaseModel class.
@@ -46,7 +49,7 @@ class BaseModel:
                 self.updated_at = datetime.strptime(
                     kwargs['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
         else:
-            storage.new(self)
+            models.storage.new(self)
 
     def __str__(self):
         """
@@ -68,7 +71,7 @@ class BaseModel:
         updated_at with the current datetime.
         """
         self.updated_at = datetime.now()
-        storage.save()
+        models.storage.save()
 
     def to_dict(self):
         """

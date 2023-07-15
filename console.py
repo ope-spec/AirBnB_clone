@@ -7,7 +7,12 @@ Entry point for the HBNB command interpreter.
 import cmd
 from models.base_model import BaseModel
 from models.user import User
-import models
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
+from models import storage
 
 
 class HBNBCommand(cmd.Cmd):
@@ -19,7 +24,12 @@ class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
     valid_classes = {
         "BaseModel": BaseModel,
-        "User": User
+        "User": User,
+        "State": State,
+        "City": City,
+        "Amenity": Amenity,
+        "Place": Place,
+        "Review": Review
     }
 
     def do_quit(self, arg):
@@ -69,7 +79,7 @@ class HBNBCommand(cmd.Cmd):
         elif len(args) < 2:
             print("** instance id missing **")
         else:
-            instances = models.storage.all()
+            instances = storage.all()
             instance_key = args[0] + "." + args[1]
             if instance_key in instances:
                 print(instances[instance_key])
@@ -90,11 +100,11 @@ class HBNBCommand(cmd.Cmd):
         elif len(args) < 2:
             print("** instance id missing **")
         else:
-            instances = models.storage.all()
+            instances = storage.all()
             instance_key = args[0] + "." + args[1]
             if instance_key in instances:
                 del instances[instance_key]
-                models.storage.save()
+                storage.save()
             else:
                 print("** no instance found **")
 
@@ -104,7 +114,7 @@ class HBNBCommand(cmd.Cmd):
         based or not on the class name.
         Usage: all or all <class name>
         """
-        instances = models.storage.all()
+        instances = storage.all()
         if not arg:
             print([str(instance) for instance in instances.values()])
         elif arg in self.valid_classes:
@@ -132,7 +142,7 @@ class HBNBCommand(cmd.Cmd):
         elif len(args) < 4:
             print("** value missing **")
         else:
-            instances = models.storage.all()
+            instances = storage.all()
             instance_key = args[0] + "." + args[1]
             if instance_key in instances:
                 instance = instances[instance_key]
