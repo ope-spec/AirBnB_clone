@@ -6,6 +6,7 @@ Entry point for the HBNB command interpreter.
 
 import cmd
 from models.base_model import BaseModel
+from models.user import User
 import models
 
 
@@ -17,7 +18,8 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = "(hbnb) "
     valid_classes = {
-        "BaseModel": BaseModel
+        "BaseModel": BaseModel,
+        "User": User
     }
 
     def do_quit(self, arg):
@@ -40,8 +42,8 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, arg):
         """
-        Creates a new instance of BaseModel, saves it (to the JSON file)
-        and prints the id.
+        Creates a new instance of BaseModel or User,
+        saves it (to the JSON file) and prints the id.
         Usage: create <class name>
         """
         if not arg:

@@ -5,6 +5,7 @@ Defines the FileStorage class.
 """
 
 import json
+from models.user import User
 
 
 class FileStorage:
@@ -16,6 +17,7 @@ class FileStorage:
 
     __file_path = "file.json"
     __objects = {}
+    classes = {"User": User}
 
     def all(self):
         """
@@ -57,9 +59,7 @@ class FileStorage:
                 obj_dict = json.load(file)
                 for key, value in obj_dict.items():
                     class_name, obj_id = key.split('.')
-                    module = __import__('models.base_model',
-                                        fromlist=[class_name])
-                    cls = getattr(module, class_name)
+                    cls = self.classes[class_name]
                     obj = cls(**value)
                     self.new(obj)
         except FileNotFoundError:
