@@ -17,8 +17,7 @@ from models.review import Review
 class FileStorage:
     """
     FileStorage class.
-    Serializes instances to a JSON file and
-    deserializes JSON file to instances.
+    Serializes instances to a JSON file and deserializes JSON file to instances.
     """
 
     __file_path = "file.json"
@@ -64,9 +63,8 @@ class FileStorage:
 
     def reload(self):
         """
-        Deserializes the JSON file (__file_path) to __objects.
-        Only if the JSON file exists; otherwise, do nothing.
-        If the file doesn't exist, no exception should be raised.
+        Deserializes the JSON file (__file_path) to __objects. Only if the JSON file exists;
+        otherwise, do nothing. If the file doesn't exist, no exception should be raised.
         """
         try:
             with open(FileStorage.__file_path, 'r', encoding='utf-8') as file:
