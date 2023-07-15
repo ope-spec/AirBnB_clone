@@ -118,8 +118,11 @@ class HBNBCommand(cmd.Cmd):
         if not arg:
             print([str(instance) for instance in instances.values()])
         elif arg in self.valid_classes:
-            class_instances = [str(instance) for instance in instances.values()
-                               if isinstance(instance, self.valid_classes[arg])]
+            class_instances = [
+                str(instance)
+                for instance in instances.values()
+                if isinstance(instance, self.valid_classes[arg])
+            ]
             print(class_instances)
         else:
             print("** class doesn't exist **")
