@@ -1,5 +1,8 @@
 #!/usr/bin/python3
-"""This module defines the HBNBCommand class, a command interpreter."""
+"""
+Module: console
+Entry point for the HBNB command interpreter.
+"""
 
 import cmd
 
