@@ -9,6 +9,7 @@ Unittest classes:
 
 import unittest
 from models.state import State
+from models import storage
 from time import sleep
 from datetime import datetime
 
@@ -20,7 +21,7 @@ class TestStateInstantiation(unittest.TestCase):
         self.assertEqual(State, type(State()))
 
     def test_new_instance_stored_in_objects(self):
-        self.assertIn(State(),models.storage.all().values())
+        self.assertIn(State(), storage.all().values())
 
     def test_id_is_public_str(self):
         self.assertEqual(str, type(State().id))
@@ -40,7 +41,7 @@ class TestStateInstantiation(unittest.TestCase):
     def test_two_states_unique_ids(self):
         state_instance_1 = State()
         state_instance_2 = State()
-        self.assertNotEqual(state_instance_1.id, state_instance_1.id)
+        self.assertNotEqual(state_instance_1.id, state_instance_2.id)
 
     def test_two_states_different_created_at(self):
         state_instance_1 = State()
