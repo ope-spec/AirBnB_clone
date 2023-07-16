@@ -140,7 +140,8 @@ class TestUserToDict(unittest.TestCase):
         self.assertTrue(dict, type(user.to_dict()))
 
     def test_to_dict_contains_correct_keys(self):
-        """Test that the returned dictionary from to_dict() contains the correct keys."""
+        """Test that the returned dictionary from
+        to_dict() contains the correct keys."""
         user = User()
         self.assertIn("id", user.to_dict())
         self.assertIn("created_at", user.to_dict())
@@ -148,7 +149,8 @@ class TestUserToDict(unittest.TestCase):
         self.assertIn("__class__", user.to_dict())
 
     def test_to_dict_contains_added_attributes(self):
-        """Test that the returned dictionary from to_dict() contains added attributes."""
+        """Test that the returned dictionary from to_dict()
+        contains added attributes."""
         user = User()
         user.email = "test@example.com"
         user.password = "password"
@@ -160,7 +162,8 @@ class TestUserToDict(unittest.TestCase):
         self.assertIn("last_name", user.to_dict())
 
     def test_to_dict_datetime_attributes_are_strs(self):
-        """Test that the datetime attributes in the returned dictionary from to_dict() are of type string."""
+        """Test that the datetime attributes in the returned
+        dictionary from to_dict() are of type string."""
         user = User()
         user_dict = user.to_dict()
         self.assertEqual(str, type(user_dict["created_at"]))
