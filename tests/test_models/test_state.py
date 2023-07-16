@@ -47,13 +47,19 @@ class TestStateInstantiation(unittest.TestCase):
         state_instance_1 = State()
         sleep(0.05)
         state_instance_2 = State()
-        self.assertLess(state_instance_1.created_at, state_instance_2.created_at)
+        self.assertLess(
+            state_instance_1.created_at,
+            state_instance_2.created_at
+        )
 
     def test_two_states_different_updated_at(self):
         state_instance_1 = State()
         sleep(0.05)
         state_instance_2 = State()
-        self.assertLess(state_instance_1.updated_at, state_instance_2.updated_at)
+        self.assertLess(
+            state_instance_1.updated_at,
+            state_instance_2.updated_at
+        )
 
     def test_str_representation(self):
         dt = datetime.today()
