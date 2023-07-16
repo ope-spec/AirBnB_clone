@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Defines unittests for file_storage"""
 
-
+import os
 import json
 import models
 import unittest
@@ -38,6 +38,25 @@ class TestFileStorage_instantiation(unittest.TestCase):
 
 class TestFileStorage_methods(unittest.TestCase):
     """Unittests for testing methods of the FileStorage class."""
+
+    @classmethod
+    def setUp(self):
+        try:
+            os.rename("file.json", "tmp")
+        except IOError:
+            pass
+
+    @classmethod
+    def tearDown(self):
+        try:
+            os.remove("file.json")
+        except IOError:
+            pass
+        try:
+            os.rename("tmp", "file.json")
+        except IOError:
+            pass
+        FileStorage._FileStorage__objects = {}
 
     def test_all(self):
         self.assertEqual(dict, type(models.storage.all()))

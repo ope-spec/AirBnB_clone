@@ -8,6 +8,7 @@ Unittest classes:
 """
 
 import unittest
+import os
 from models.user import User
 from models import storage
 from datetime import datetime
@@ -92,6 +93,23 @@ class TestUserInstantiation(unittest.TestCase):
 
 class TestUserSave(unittest.TestCase):
     """Unittests for testing User save method."""
+
+    @classmethod
+    def setUp(self):
+        try:
+            os.rename("file.json", "tmp")
+        except IOError:
+            pass
+
+    def tearDown(self):
+        try:
+            os.remove("file.json")
+        except IOError:
+            pass
+        try:
+            os.rename("tmp", "file.json")
+        except IOError:
+            pass
 
     def test_one_save(self):
         user = User()

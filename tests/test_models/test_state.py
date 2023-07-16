@@ -8,6 +8,7 @@ Unittest classes:
 """
 
 import unittest
+import os
 from models.state import State
 from models import storage
 from time import sleep
@@ -106,6 +107,23 @@ class TestStateInstantiation(unittest.TestCase):
 
 class TestStateSave(unittest.TestCase):
     """Unittests for testing State save method."""
+
+    @classmethod
+    def setUp(self):
+        try:
+            os.rename("file.json", "tmp")
+        except IOError:
+            pass
+
+    def tearDown(self):
+        try:
+            os.remove("file.json")
+        except IOError:
+            pass
+        try:
+            os.rename("tmp", "file.json")
+        except IOError:
+            pass
 
     def test_one_save(self):
         state_instance = State()

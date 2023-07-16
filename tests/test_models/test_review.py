@@ -8,6 +8,7 @@ Unittest classes:
 """
 
 import unittest
+import os
 from models.review import Review
 from models import storage
 from time import sleep
@@ -120,6 +121,23 @@ class TestReviewInstantiation(unittest.TestCase):
 
 class TestReviewSave(unittest.TestCase):
     """Unittests for testing Review save method."""
+
+    @classmethod
+    def setUp(self):
+        try:
+            os.rename("file.json", "tmp")
+        except IOError:
+            pass
+
+    def tearDown(self):
+        try:
+            os.remove("file.json")
+        except IOError:
+            pass
+        try:
+            os.rename("tmp", "file.json")
+        except IOError:
+            pass
 
     def test_one_save(self):
         review_instance = Review()

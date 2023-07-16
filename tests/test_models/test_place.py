@@ -8,6 +8,7 @@ Unittest classes:
 """
 
 import unittest
+import os
 from models.place import Place
 from models import storage
 from time import sleep
@@ -179,6 +180,23 @@ class TestPlaceInstantiation(unittest.TestCase):
 
 class TestPlaceSave(unittest.TestCase):
     """Unittests for testing Place save method."""
+
+    @classmethod
+    def setUp(self):
+        try:
+            os.rename("file.json", "tmp")
+        except IOError:
+            pass
+
+    def tearDown(self):
+        try:
+            os.remove("file.json")
+        except IOError:
+            pass
+        try:
+            os.rename("tmp", "file.json")
+        except IOError:
+            pass
 
     def test_one_save(self):
         place_instance = Place()

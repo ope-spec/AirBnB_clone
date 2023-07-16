@@ -7,6 +7,7 @@ Unittest classes:
     TestCityToDict
 """
 
+import os
 import unittest
 from models.city import City
 from models import storage
@@ -107,6 +108,23 @@ class TestCityInstantiation(unittest.TestCase):
 
 class TestCitySave(unittest.TestCase):
     """Unittests for testing City save method."""
+
+    @classmethod
+    def setUp(self):
+        try:
+            os.rename("file.json", "tmp")
+        except IOError:
+            pass
+
+    def tearDown(self):
+        try:
+            os.remove("file.json")
+        except IOError:
+            pass
+        try:
+            os.rename("tmp", "file.json")
+        except IOError:
+            pass
 
     def test_one_save(self):
         city_instance = City()

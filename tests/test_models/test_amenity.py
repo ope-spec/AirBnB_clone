@@ -8,6 +8,7 @@ Unittest classes:
 """
 
 import unittest
+import os
 from models.amenity import Amenity
 from models import storage
 from time import sleep
@@ -106,6 +107,23 @@ class TestAmenityInstantiation(unittest.TestCase):
 
 class TestAmenitySave(unittest.TestCase):
     """Unittests for testing Amenity save method."""
+
+    @classmethod
+    def setUp(self):
+        try:
+            os.rename("file.json", "tmp")
+        except IOError:
+            pass
+
+    def tearDown(self):
+        try:
+            os.remove("file.json")
+        except IOError:
+            pass
+        try:
+            os.rename("tmp", "file.json")
+        except IOError:
+            pass
 
     def test_one_save(self):
         amenity_instance = Amenity()

@@ -7,10 +7,31 @@ Unittest classes:
     TestBaseModel_to_dict
 """
 
+import os
 import unittest
 from models.base_model import BaseModel
 from datetime import datetime
 from time import sleep
+
+
+@classmethod
+def setUp(self):
+    try:
+        os.rename("file.json", "tmp")
+    except IOError:
+        pass
+
+
+@classmethod
+def tearDown(self):
+    try:
+        os.remove("file.json")
+    except IOError:
+        pass
+    try:
+        os.rename("tmp", "file.json")
+    except IOError:
+        pass
 
 
 class TestBaseModel(unittest.TestCase):
