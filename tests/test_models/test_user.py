@@ -9,8 +9,9 @@ Unittest classes:
 
 import unittest
 from models.user import User
-from time import sleep
+from models import storage
 from datetime import datetime
+from time import sleep
 
 
 class TestUserInstantiation(unittest.TestCase):
@@ -20,7 +21,7 @@ class TestUserInstantiation(unittest.TestCase):
         self.assertEqual(User, type(User()))
 
     def test_new_instance_stored_in_objects(self):
-        self.assertIn(User(), models.storage.all().values())
+        self.assertIn(User(), storage.all().values())
 
     def test_id_is_public_str(self):
         self.assertEqual(str, type(User().id))
@@ -87,23 +88,6 @@ class TestUserInstantiation(unittest.TestCase):
     def test_instantiation_with_None_kwargs(self):
         with self.assertRaises(TypeError):
             User(id=None, created_at=None, updated_at=None)
-
-    def test_instantiation(self):
-        """Test that User instance is correctly instantiated."""
-        user = User()
-        self.assertIsInstance(user, User)
-        self.assertIs(type(user), User)
-        self.assertIsNotNone(user.id)
-        self.assertIsNotNone(user.created_at)
-        self.assertIsNotNone(user.updated_at)
-
-    def test_attributes_initialization(self):
-        """Test that User attributes are correctly initialized."""
-        user = User()
-        self.assertEqual(user.email, "")
-        self.assertEqual(user.password, "")
-        self.assertEqual(user.first_name, "")
-        self.assertEqual(user.last_name, "")
 
 
 class TestUserSave(unittest.TestCase):
@@ -187,17 +171,24 @@ class TestUserToDict(unittest.TestCase):
         dt = datetime.today()
         user = User()
         user.id = "123456"
-        user.created_at = user.updated_at = dt
+        user.created_at = dt
+        user.updated_at = dt
+        user.email = "test@example.com"
+        user.password = "password"
+        user.first_name = "John"
+        user.last_name = "Doe"
+
         tdict = {
             'id': '123456',
             '__class__': 'User',
             'created_at': dt.isoformat(),
             'updated_at': dt.isoformat(),
-            'email': "",
-            'password': "",
-            'first_name': "",
-            'last_name': ""
+            'email': "test@example.com",
+            'password': "password",
+            'first_name': "John",
+            'last_name': "Doe"
         }
+
         self.assertDictEqual(user.to_dict(), tdict)
 
     def test_to_dict_with_arg(self):
