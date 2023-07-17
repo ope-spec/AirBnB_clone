@@ -149,12 +149,11 @@ class HBNBCommand(cmd.Cmd):
             instance_key = args[0] + "." + args[1]
             if instance_key in instances:
                 instance = instances[instance_key]
-                attribute_dict = {}
-                for i in range(2, len(args), 2):
-                    attribute_dict[args[i]] = args[i + 1].strip('\'"')
-                for key, value in attribute_dict.items():
-                    if hasattr(instance, key):
-                        setattr(instance, key, value)
+                attribute_dict_str = args[2]
+                attribute_dict = eval(attribute_dict_str)
+                for attr_name, attr_value in attribute_dict.items():
+                    if hasattr(instance, attr_name):
+                        setattr(instance, attr_name, attr_value)
                     else:
                         print("** attribute doesn't exist **")
                         return
