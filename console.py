@@ -114,18 +114,18 @@ class HBNBCommand(cmd.Cmd):
         based or not on the class name.
         Usage: all or all <class name>
         """
-        instances = storage.all()
-        if not arg:
-            print([str(instance) for instance in instances.values()])
-        elif arg in self.valid_classes:
-            class_instances = [
-                str(instance)
-                for instance in instances.values()
-                if isinstance(instance, self.valid_classes[arg])
-            ]
-            print(class_instances)
+        arg_list = arg.split('.')
+        if arg == "" or arg == "all":
+            obj_list = [str(obj) for obj in storage.all().values()]
+        elif len(arg_list) == 1 and arg_list[0] in self.valid_classes:
+            obj_list = [str(obj) for obj in storage.all().values() if isinstance(obj, self.valid_classes[arg_list[0]])]
+        elif len(arg_list) == 2 and arg_list[1] == "all" and arg_list[0] in self.valid_classes:
+            obj_list = [str(obj) for obj in storage.all().values() if isinstance(obj, self.valid_classes[arg_list[0]])]
         else:
             print("** class doesn't exist **")
+            return
+
+        print(obj_list)
 
     def do_update(self, arg):
         """

@@ -23,3 +23,9 @@ class User(BaseModel):
         Initializes a new User instance.
         """
         super().__init__(*args, **kwargs)
+
+    @classmethod
+    def all(cls):
+        """Returns a list of all User instances."""
+        from models import storage
+        return list(storage.all(User).values())
