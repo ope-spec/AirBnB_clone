@@ -152,8 +152,7 @@ class HBNBCommand(cmd.Cmd):
                 attribute_name = args[2]
                 attribute_value = args[3]
                 if hasattr(instance, attribute_name):
-                    attribute_type = type(getattr(instance, attribute_name))
-                    setattr(instance, attribute_name, attribute_type(attribute_value))
+                    setattr(instance, attribute_name, attribute_value)
                     instance.save()
                 else:
                     print("** attribute doesn't exist **")
@@ -183,16 +182,19 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
                 return
 
-        if arg.startswith("User.destroy"):
+        if arg.startswith("User.update"):
             args = arg.split("(")
-            if len(args) == 2 and args[0] == "User.destroy" and args[1].endswith(")"):
-                instance_id = args[1][1:-2].strip('\'"')
+            if len(args) == 2 and args[0] == "User.update" and args[1].endswith(")"):
+                params = args[1][1:-2].split(", ")
+                instance_id = params[0].strip('\'"')
+                attribute_name = params[1].strip('\'"')
+                attribute_value = params[2].strip('\'"')
                 instances = storage.all()
                 for key, instance in instances.items():
                     class_name, obj_id = key.split('.')
                     if class_name == "User" and instance.id == instance_id:
-                        del instances[key]
-                        storage.save()
+                        setattr(instance, attribute_name, attribute_value)
+                        instance.save()
                         return
                 print("** no instance found **")
                 return
