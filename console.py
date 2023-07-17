@@ -183,6 +183,20 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
                 return
 
+        if arg.startswith("User.destroy"):
+            args = arg.split("(")
+            if len(args) == 2 and args[0] == "User.destroy" and args[1].endswith(")"):
+                instance_id = args[1][1:-2].strip('\'"')
+                instances = storage.all()
+                for key, instance in instances.items():
+                    class_name, obj_id = key.split('.')
+                    if class_name == "User" and instance.id == instance_id:
+                        del instances[key]
+                        storage.save()
+                        return
+                print("** no instance found **")
+                return
+
         print("** Unknown command **")
 
 
