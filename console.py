@@ -156,6 +156,19 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** no instance found **")
 
+    def default(self, arg):
+        """
+        Default behavior for unrecognized commands.
+        """
+        if arg.endswith(".count()"):
+            class_name = arg[:-8]  # Remove ".count()" from the command
+            if class_name in self.valid_classes:
+                count = sum(1 for obj in storage.all().values() if isinstance(obj, self.valid_classes[class_name]))
+                print(count)
+                return
+
+        print("** Unknown command **")
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
