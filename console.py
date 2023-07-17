@@ -130,7 +130,7 @@ class HBNBCommand(cmd.Cmd):
     def do_update(self, arg):
         """
         Updates an instance based on the class name and id
-        by adding or updating attribute (save the change into the JSON file).
+        by adding or updating attributes (save the change into the JSON file).
         Usage: update <class name> <id> <attribute name> "<attribute value>"
         """
         args = arg.split()
@@ -149,13 +149,16 @@ class HBNBCommand(cmd.Cmd):
             instance_key = args[0] + "." + args[1]
             if instance_key in instances:
                 instance = instances[instance_key]
-                attribute_name = args[2]
-                attribute_value = args[3]
-                if hasattr(instance, attribute_name):
-                    setattr(instance, attribute_name, attribute_value)
-                    instance.save()
-                else:
-                    print("** attribute doesn't exist **")
+                attribute_dict = {}
+                for i in range(2, len(args), 2):
+                    attribute_dict[args[i]] = args[i + 1].strip('\'"')
+                for key, value in attribute_dict.items():
+                    if hasattr(instance, key):
+                        setattr(instance, key, value)
+                    else:
+                        print("** attribute doesn't exist **")
+                        return
+                instance.save()
             else:
                 print("** no instance found **")
 
@@ -187,13 +190,18 @@ class HBNBCommand(cmd.Cmd):
             if len(args) == 2 and args[0] == "User.update" and args[1].endswith(")"):
                 params = args[1][1:-2].split(", ")
                 instance_id = params[0].strip('\'"')
-                attribute_name = params[1].strip('\'"')
-                attribute_value = params[2].strip('\'"')
+                attribute_dict_str = params[1]
+                attribute_dict = eval(attribute_dict_str)
                 instances = storage.all()
                 for key, instance in instances.items():
                     class_name, obj_id = key.split('.')
                     if class_name == "User" and instance.id == instance_id:
-                        setattr(instance, attribute_name, attribute_value)
+                        for attr_name, attr_value in attribute_dict.items():
+                            if hasattr(instance, attr_name):
+                                setattr(instance, attr_name, attr_value)
+                            else:
+                                print("** attribute doesn't exist **")
+                                return
                         instance.save()
                         return
                 print("** no instance found **")
