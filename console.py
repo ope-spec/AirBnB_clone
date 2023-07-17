@@ -167,6 +167,18 @@ class HBNBCommand(cmd.Cmd):
                 print(count)
                 return
 
+        if arg.startswith("User.show"):
+            args = arg.split("(")
+            if len(args) == 2 and args[0] == "User.show" and args[1].endswith(")"):
+                instance_id = args[1][1:-2].strip('\'"')
+                instances = storage.all()
+                for instance in instances.values():
+                    if isinstance(instance, User) and instance.id == instance_id:
+                        print(instance)
+                        return
+                print("** no instance found **")
+                return
+
         print("** Unknown command **")
 
 
