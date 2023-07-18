@@ -156,14 +156,9 @@ class HBNBCommand(cmd.Cmd):
             instance_key = args[0] + "." + args[1]
             if instance_key in instances:
                 instance = instances[instance_key]
-                attribute_dict_str = args[2]
-                attribute_dict = eval(attribute_dict_str)
-                for attr_name, attr_value in attribute_dict.items():
-                    if hasattr(instance, attr_name):
-                        setattr(instance, attr_name, attr_value)
-                    else:
-                        print("** attribute doesn't exist **")
-                        return
+                attribute_name = args[2]
+                attribute_value = args[3]
+                setattr(instance, attribute_name, attribute_value)
                 instance.save()
             else:
                 print("** no instance found **")
