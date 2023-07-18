@@ -118,9 +118,16 @@ class HBNBCommand(cmd.Cmd):
         if arg == "" or arg == "all":
             obj_list = [str(obj) for obj in storage.all().values()]
         elif len(arg_list) == 1 and arg_list[0] in self.valid_classes:
-            obj_list = [str(obj) for obj in storage.all().values() if isinstance(obj, self.valid_classes[arg_list[0]])]
-        elif len(arg_list) == 2 and arg_list[1] == "all" and arg_list[0] in self.valid_classes:
-            obj_list = [str(obj) for obj in storage.all().values() if isinstance(obj, self.valid_classes[arg_list[0]])]
+            obj_list = [
+                str(obj) for obj in storage.all().values()
+                if isinstance(obj, self.valid_classes[arg_list[0]])
+            ]
+        elif len(arg_list) == 2 and arg_list[1] == "all" and \
+                arg_list[0] in self.valid_classes:
+            obj_list = [
+                str(obj) for obj in storage.all().values()
+                if isinstance(obj, self.valid_classes[arg_list[0]])
+            ]
         else:
             print("** class doesn't exist **")
             return
@@ -168,17 +175,32 @@ class HBNBCommand(cmd.Cmd):
         if arg.endswith(".count()"):
             class_name = arg[:-8]  # Remove ".count()" from the command
             if class_name in self.valid_classes:
-                count = sum(1 for obj in storage.all().values() if isinstance(obj, self.valid_classes[class_name]))
+                count = sum(
+                    1 for obj in storage.all().values()
+                    if isinstance(obj, self.valid_classes[class_name])
+                )
                 print(count)
+                return
+
+        if arg.endswith(".all()"):
+            class_name = arg[:-6]  # Remove ".all()" from the command
+            if class_name in self.valid_classes:
+                obj_list = [
+                    str(obj) for obj in storage.all().values()
+                    if isinstance(obj, self.valid_classes[class_name])
+                ]
+                print(obj_list)
                 return
 
         if arg.startswith("User.show"):
             args = arg.split("(")
-            if len(args) == 2 and args[0] == "User.show" and args[1].endswith(")"):
+            if len(args) == 2 and args[0] == "User.show" and \
+                    args[1].endswith(")"):
                 instance_id = args[1][1:-2].strip('\'"')
                 instances = storage.all()
                 for instance in instances.values():
-                    if isinstance(instance, User) and instance.id == instance_id:
+                    if isinstance(instance, User) and \
+                            instance.id == instance_id:
                         print(instance)
                         return
                 print("** no instance found **")
@@ -186,7 +208,8 @@ class HBNBCommand(cmd.Cmd):
 
         if arg.startswith("User.update"):
             args = arg.split("(")
-            if len(args) == 2 and args[0] == "User.update" and args[1].endswith(")"):
+            if len(args) == 2 and args[0] == "User.update" and \
+                    args[1].endswith(")"):
                 params = args[1][1:-2].split(", ")
                 instance_id = params[0].strip('\'"')
                 attribute_dict_str = params[1]
