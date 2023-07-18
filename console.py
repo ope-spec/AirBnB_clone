@@ -173,7 +173,7 @@ class HBNBCommand(cmd.Cmd):
         Default behavior for unrecognized commands.
         """
         if arg.endswith(".all()"):
-            class_name = arg[:-6]  # Remove ".all()" from the command
+            class_name = arg[:-6]
             if class_name in self.valid_classes:
                 obj_list = [
                     str(obj) for obj in storage.all().values()
@@ -204,28 +204,24 @@ class HBNBCommand(cmd.Cmd):
                     print("** no instance found **")
                     return
 
-        if arg.startswith("User.update"):
+        if arg.startswith(".destroy"):
             args = arg.split("(")
-            if len(args) == 2 and args[0] == "User.update" and \
+            if len(args) == 2 and args[0].endswith(".destroy") and \
                     args[1].endswith(")"):
-                params = args[1][1:-2].split(", ")
-                instance_id = params[0].strip('\'"')
-                attribute_dict_str = params[1]
-                attribute_dict = eval(attribute_dict_str)
-                instances = storage.all()
-                for key, instance in instances.items():
-                    class_name, obj_id = key.split('.')
-                    if class_name == "User" and instance.id == instance_id:
-                        for attr_name, attr_value in attribute_dict.items():
-                            if hasattr(instance, attr_name):
-                                setattr(instance, attr_name, attr_value)
-                            else:
-                                print("** attribute doesn't exist **")
-                                return
-                        instance.save()
-                        return
-                print("** no instance found **")
-                return
+                params = args[1][:-1].strip('\'"')
+                params = params.split(",")
+                if len(params) == 2:
+                    class_name = args[0][1:-8]
+                    instance_id = params[0].strip('\'"')
+                    instances = storage.all()
+                    for key, instance in instances.items():
+                        cn, obj_id = key.split('.')
+                        if cn == class_name and instance.id == instance_id:
+                            del instances[key]
+                            storage.save()
+                            return
+                    print("** no instance found **")
+                    return
 
         print("** Unknown command **")
 
