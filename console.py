@@ -172,16 +172,6 @@ class HBNBCommand(cmd.Cmd):
         """
         Default behavior for unrecognized commands.
         """
-        if arg.endswith(".count()"):
-            class_name = arg[:-8]  # Remove ".count()" from the command
-            if class_name in self.valid_classes:
-                count = sum(
-                    1 for obj in storage.all().values()
-                    if isinstance(obj, self.valid_classes[class_name])
-                )
-                print(count)
-                return
-
         if arg.endswith(".all()"):
             class_name = arg[:-6]  # Remove ".all()" from the command
             if class_name in self.valid_classes:
@@ -192,19 +182,27 @@ class HBNBCommand(cmd.Cmd):
                 print(obj_list)
                 return
 
-        if arg.startswith("User.show"):
+        if arg.endswith(".show()"):
+            print("** instance id missing **")
+            return
+
+        if arg.startswith(".show"):
             args = arg.split("(")
-            if len(args) == 2 and args[0] == "User.show" and \
+            if len(args) == 2 and args[0].endswith(".show") and \
                     args[1].endswith(")"):
-                instance_id = args[1][1:-2].strip('\'"')
-                instances = storage.all()
-                for instance in instances.values():
-                    if isinstance(instance, User) and \
-                            instance.id == instance_id:
-                        print(instance)
-                        return
-                print("** no instance found **")
-                return
+                params = args[1][:-1].strip('\'"')
+                params = params.split(",")
+                if len(params) == 2:
+                    class_name = args[0][1:-5]
+                    instance_id = params[0].strip('\'"')
+                    instances = storage.all()
+                    for key, instance in instances.items():
+                        cn, obj_id = key.split('.')
+                        if cn == class_name and instance.id == instance_id:
+                            print(instance)
+                            return
+                    print("** no instance found **")
+                    return
 
         if arg.startswith("User.update"):
             args = arg.split("(")
